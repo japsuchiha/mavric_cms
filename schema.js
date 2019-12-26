@@ -1,3 +1,4 @@
+const axios = require('axios')
 const {
     GraphQLObjectType,
     GraphQLString,
@@ -36,7 +37,6 @@ const TimelineQuery = new GraphQLObjectType({
 })
 
 // Testimonials Query
-
 const TestimonialsQuery = new GraphQLObjectType({
     name:{type:GraphQLString},
     test:{type:GraphQLString}
@@ -45,11 +45,37 @@ const TestimonialsQuery = new GraphQLObjectType({
 // Root Query 
 const RootQuery = new GraphQLObjectType({
     name: 'RootQueryType',
-    about: {
-        type:AboutType
+    fields:{
+        about:{
+            type: AboutQuery,
+            args:{
+                desc: {type:GraphQLString}
+            },
+            resolve(parentValue, args) {
+                return axios.get('http://localhost:3000/about').then(res => res.data)
+            }
+        }
     }
 })
 
+// Mutations
+const mutation = new GraphQLObjectType({
+    name: "Mutation",
+    fields: {
+        addAbout:{
+            type: AboutQuery,
+            args: {
+                desc: {type: new GraphQLNonNull(GraphQLString)}
+            },
+            resolve(parentValue, args) {
+                return axios.post('http://localhst:3000/about', {
+                    desc: args.desc
+                }).then(res => res.data)
+            }
+        }
+    }
+})
 module.exports = new GraphQLSchema({
-
+    query: RootQuery,
+    mutation
 });
