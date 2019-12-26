@@ -6,7 +6,8 @@
   "scripts": {
     "dev:server": "nodemon server.js",
     "json:server": "json-server --watch data.json",
-    "build": "browserify script.js -o bundle.js"
+    "build": "browserify script.js -o bundle.js",
+    "watch": "watchify script.js -o bundle.js"
   },
   "repository": {
     "type": "git",

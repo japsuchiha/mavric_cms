@@ -26,21 +26,24 @@ const EventsQuery = new GraphQLObjectType({
 
 // Services Query
 const ServiceQuery = new GraphQLObjectType({
-    name:{type:GraphQLString},
-    attr:{type:GraphQLString}
+    name: 'Service',
+    fields: () => ({
+        name:{type:GraphQLString},
+        attr:{type:GraphQLString}
+    })
 })
 
-// Timline Query
-const TimelineQuery = new GraphQLObjectType({
-    date:{type:GraphQLString},
-    event:{type:GraphQLString}
-})
+// // Timline Query
+// const TimelineQuery = new GraphQLObjectType({
+//     date:{type:GraphQLString},
+//     event:{type:GraphQLString}
+// })
 
-// Testimonials Query
-const TestimonialsQuery = new GraphQLObjectType({
-    name:{type:GraphQLString},
-    test:{type:GraphQLString}
-})
+// // Testimonials Query
+// const TestimonialsQuery = new GraphQLObjectType({
+//     name:{type:GraphQLString},
+//     test:{type:GraphQLString}
+// })
 
 // Root Query 
 const RootQuery = new GraphQLObjectType({

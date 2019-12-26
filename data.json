@@ -15,5 +15,8 @@
   ],
   "profile": {
     "name": "typicode"
+  },
+  "about": {
+    "query": "{ type here }"
   }
 }
