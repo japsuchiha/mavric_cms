@@ -48,6 +48,7 @@ document.querySelector('.about-but').addEventListener("click", (e) => {
       .then(console.log)
 })
 
+
 // Events
 query = `
   {
@@ -56,7 +57,6 @@ query = `
     }
   }
 `
-let events = ""
 fetch('http://localhost:4000/graphql', {
         method: 'POST',
         headers: {
@@ -97,4 +97,33 @@ fetch('http://localhost:4000/graphql', {
   })
   .then((resp) => resp.json())
   .then(console.log)
+})
+
+//Services
+query = `
+  {
+    services {
+      name,
+      attr
+    }
+  }
+`
+fetch('http://localhost:4000/graphql', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          query: query
+        })
+})
+.then((resp) => resp.json())
+.then(({data}) => data.services.forEach(element => {
+  let z = document.createElement('li')
+  z.innerHTML = element.name
+  console.log(z)
+  document.querySelector('.'+element.attr).appendChild(z)
+}))
+document.querySelector('.xr-but').addEventListener('click', () => {
+
 })

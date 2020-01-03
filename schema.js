@@ -70,6 +70,21 @@ const RootQuery = new GraphQLObjectType({
             resolve() {
                 return axios.get('http://localhost:3000/events').then(res => res.data)
             }
+        },
+        service: {
+            type: ServiceQuery,
+            args: {
+                id:{type: GraphQLString}
+            },
+            resolve(parentValue, args) {
+                return axios.get('http://localhost:3000/services/' + args.id).then(res => res.data)
+            }
+        },
+        services: {
+            type: new GraphQLList(ServiceQuery),
+            resolve() {
+                return axios.get('http://localhost:3000/services').then(res => res.data)
+            }
         }
     }
 })
@@ -98,6 +113,13 @@ const mutation = new GraphQLObjectType({
                 return axios.post('http://localhost:3000/events', {
                     name: args.name
                 }).then(res => res.data)
+            }
+        },
+        addService:{
+            type: ServiceQuery,
+            args: {
+                name: {type: new GraphQLNonNull(GraphQLString)},
+                attr: {type: new GraphQLNonNull(GraphQLString)}
             }
         }
     }
