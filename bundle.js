@@ -152,4 +152,56 @@ fetch('http://localhost:4000/graphql', {
   .then((resp) => resp.json())
   .then(console.log)
 })
+
+// Timeline
+query = `
+  {
+    timelines {
+      date,
+      event
+    }
+  }
+`
+fetch('http://localhost:4000/graphql', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          query: query
+        })
+})
+.then((resp) => resp.json())
+.then(({data}) => data.timelines.forEach(element => {
+  let z = document.createElement('li')
+  z.innerHTML = element.event
+  console.log(z)
+  document.querySelector('.time').appendChild(z)
+}))
+
+document.querySelector('.time-but').addEventListener('click', () => {
+  const date = document.querySelector('.time-date').value
+  const event = document.querySelector('.time-event').value
+  console.log(date, event)
+
+  query = `
+    mutation{
+      addTimeline(event: "${event}", date: "${date}") {
+        event,
+        date
+      }
+    }
+  `
+fetch('http://localhost:4000/graphql', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      query:query
+    })
+  })
+  .then((resp) => resp.json())
+  .then(console.log)
+})
 },{}]},{},[1]);

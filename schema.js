@@ -34,11 +34,14 @@ const ServiceQuery = new GraphQLObjectType({
     })
 })
 
-// // Timline Query
-// const TimelineQuery = new GraphQLObjectType({
-//     date:{type:GraphQLString},
-//     event:{type:GraphQLString}
-// })
+// Timline Query
+const TimelineQuery = new GraphQLObjectType({
+    name: 'Timeline',
+    fields: () => ({
+        date:{type:GraphQLString},
+        event:{type:GraphQLString}
+    })
+})
 
 // // Testimonials Query
 // const TestimonialsQuery = new GraphQLObjectType({
@@ -85,6 +88,21 @@ const RootQuery = new GraphQLObjectType({
             resolve() {
                 return axios.get('http://localhost:3000/services').then(res => res.data)
             }
+        },
+        timeline: {
+            type: TimelineQuery,
+            args: {
+                id: {type:GraphQLString}
+            },
+            resolve(parentValue, args) {
+                return axios.get('http://localhost:3000/timelines/' + args.id).then(res => res.data)
+            }
+        },
+        timelines: {
+            type: new GraphQLList(TimelineQuery),
+            resolve() {
+                return axios.get('http://localhost:3000/timelines').then(res => res.data)
+            }
         }
     }
 })
@@ -125,6 +143,19 @@ const mutation = new GraphQLObjectType({
                 return axios.post('http://localhost:3000/services', {
                     name: args.name,
                     attr: args.attr
+                }).then(res => res.data)
+            }
+        },
+        addTimeline: {
+            type: TimelineQuery,
+            args: {
+                event: {type: new GraphQLNonNull(GraphQLString)},
+                date: {type: new GraphQLNonNull(GraphQLString)}
+            },
+            resolve(parentValue, args){
+                return axios.post('http://localhost:3000/timelines', {
+                    event: args.event,
+                    date: args.date
                 }).then(res => res.data)
             }
         }
