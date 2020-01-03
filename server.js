@@ -9,7 +9,7 @@ app.use(cors())
 
 app.use('/graphql', expressGraphQL({
     schema:schema,
-    graphiql:false
+    graphiql:true
 }));
 
 app.listen(4000, () => {

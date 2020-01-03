@@ -20,7 +20,7 @@ const AboutQuery = new GraphQLObjectType({
 const EventsQuery = new GraphQLObjectType({
     name:'Events',
     fields: () => ({
-        id: {type:GraphQLInt},
+        id: {type:GraphQLString},
         name: {type:GraphQLString}   
     })
 })
@@ -56,9 +56,18 @@ const RootQuery = new GraphQLObjectType({
                 return axios.get('http://localhost:3000/about').then(res => res.data)
             }
         },
-        events:{
-            type: new GraphQLList(EventsQuery),
+        event:{
+            type: EventsQuery,
+            args:{
+                id:{type: GraphQLString}
+            },
             resolve(parentValue, args) {
+                return axios.get('http://localhost:3000/events/' + args.id).then(res => res.data)
+            }
+        },
+        events: {
+            type: new GraphQLList(EventsQuery),
+            resolve() {
                 return axios.get('http://localhost:3000/events').then(res => res.data)
             }
         }
@@ -86,7 +95,7 @@ const mutation = new GraphQLObjectType({
                 name: {type: new GraphQLNonNull(GraphQLString)}
             },
             resolve(parentValue, args) {
-                return axios.post('http://localhst:3000/events', {
+                return axios.post('http://localhost:3000/events', {
                     name: args.name
                 }).then(res => res.data)
             }

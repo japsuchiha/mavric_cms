@@ -19,5 +19,18 @@
   "about": {
     "desc": "ya"
   },
-  "events": []
+  "events": [
+    {
+      "id": "1",
+      "name": "day1"
+    },
+    {
+      "id": "2",
+      "name": "day2"
+    },
+    {
+      "name": "ll",
+      "id": "78Qukf9"
+    }
+  ]
 }

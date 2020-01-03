@@ -49,23 +49,52 @@ document.querySelector('.about-but').addEventListener("click", (e) => {
 })
 
 // Events
-fetch('http://localhost:3000/events')
+query = `
+  {
+    events {
+      name
+    }
+  }
+`
+let events = ""
+fetch('http://localhost:4000/graphql', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          query: query
+        })
+})
 .then((resp) => resp.json())
-.then((events) => console.log(events))
+.then(({data}) => data.events.forEach(element => {
+  let z = document.createElement('li')
+  z.innerHTML = element.name
+  console.log(z)
+  document.querySelector('.curr-events').appendChild(z)
+}))
+
 document.querySelector('.add').addEventListener("click", () => {
   console.log("sending")
   const name = document.querySelector('.name').value
   console.log(name)
   let data
-  fetch('http://localhost:3000/events')
-  .then((resp) => resp.json())
-  .then((events) => fetch('http://localhost:3000/events', {
+  query = `
+    mutation{
+      addEvents(name: "${name}") {
+        name
+      }
+    }
+  `
+fetch('http://localhost:4000/graphql', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'Accept': 'application/json'
     },
-    body: JSON.stringify(events.push(`${name}`))
-  }))
-
+    body: JSON.stringify({
+      query:query
+    })
+  })
+  .then((resp) => resp.json())
+  .then(console.log)
 })
