@@ -75,7 +75,7 @@ const mutation = new GraphQLObjectType({
                 desc: {type: new GraphQLNonNull(GraphQLString)}
             },
             resolve(parentValue, args) {
-                return axios.post('http://localhst:3000/about', {
+                return axios.post('http://localhost:3000/about', {
                     desc: args.desc
                 }).then(res => res.data)
             }

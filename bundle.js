@@ -2,7 +2,7 @@
 
 // get requests
 const proxyurl = "https://cors-anywhere.herokuapp.com/";
-const query = `
+let query = `
   {
     about {
       desc
@@ -23,19 +23,30 @@ fetch('http://localhost:4000/graphql', {
 .then(({data}) => document.querySelector('.about-text').innerHTML = data.about.desc)
 
 // POST for about queries
+
 document.querySelector('.about-but').addEventListener("click", (e) => {
     e.preventDefault();
     console.log("sending")
     const about = document.querySelector('.about-text').value
     console.log(about)
-    fetch('http://localhost:3000/about', {
+    query = ` 
+  mutation {
+    addAbout(desc:"${about}"){
+      desc
+    }
+  }
+`
+    fetch('http://localhost:4000/graphql', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Accept': 'application/json',
         },
-        body: JSON.stringify({desc: `${about}`})
+        body: JSON.stringify({
+          query: query
+        })
       })
+      .then((resp) => resp.json())
+      .then(console.log)
 })
 
 // Events
