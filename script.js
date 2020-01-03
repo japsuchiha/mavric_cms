@@ -203,3 +203,59 @@ fetch('http://localhost:4000/graphql', {
   .then((resp) => resp.json())
   .then(console.log)
 })
+
+// Testimonials
+
+query = `
+  {
+    testimonials {
+      author,
+      test
+    }
+  }
+`
+fetch('http://localhost:4000/graphql', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          query: query
+        })
+})
+.then((resp) => resp.json())
+.then(({data}) => data.testimonials.forEach(element => {
+  let z = document.createElement('li')
+  z.innerHTML = element.test + '  -' + element.author
+  console.log(z)
+  document.querySelector('.tests').appendChild(z)
+}))
+
+
+document.querySelector('.add-test').addEventListener('click', () => {
+const author = document.querySelector('.author').value
+const test = document.querySelector('.test').value
+
+query = `
+mutation{
+  addTestimonial(author: "${author}", test: "${test}") {
+    author,
+    test
+  }
+}
+`
+
+fetch('http://localhost:4000/graphql', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      query:query
+    })
+  })
+  .then((resp) => resp.json())
+  .then(console.log)
+
+})
+

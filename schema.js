@@ -43,11 +43,14 @@ const TimelineQuery = new GraphQLObjectType({
     })
 })
 
-// // Testimonials Query
-// const TestimonialsQuery = new GraphQLObjectType({
-//     name:{type:GraphQLString},
-//     test:{type:GraphQLString}
-// })
+// Testimonials Query
+const TestimonialsQuery = new GraphQLObjectType({
+    name: "Testimonial",
+    fields: () => ({
+        author:{type:GraphQLString},
+        test:{type:GraphQLString}
+    })
+})
 
 // Root Query 
 const RootQuery = new GraphQLObjectType({
@@ -103,6 +106,21 @@ const RootQuery = new GraphQLObjectType({
             resolve() {
                 return axios.get('http://localhost:3000/timelines').then(res => res.data)
             }
+        },
+        testimonial: {
+            type: TestimonialsQuery,
+            args: {
+                id: {type: GraphQLString}
+            },
+            resolve(parentValue, args) {
+                return axios.get('http://localhost:3000/testimonials/' + args.id).then(res => res.data)
+            }
+        },
+        testimonials: {
+            type: new GraphQLList(TestimonialsQuery),
+            resolve() {
+                return axios.get('http://localhost:3000/testimonials').then(res => res.data)
+            }
         }
     }
 })
@@ -156,6 +174,19 @@ const mutation = new GraphQLObjectType({
                 return axios.post('http://localhost:3000/timelines', {
                     event: args.event,
                     date: args.date
+                }).then(res => res.data)
+            }
+        },
+        addTestimonial: {
+            type: TestimonialsQuery,
+            args: {
+                author: {type: new GraphQLNonNull(GraphQLString)},
+                test: {type: new GraphQLNonNull(GraphQLString)}
+            },
+            resolve(parentValue, args){
+                return axios.post('http://localhost:3000/testimonials', {
+                    author: args.author,
+                    test: args.test
                 }).then(res => res.data)
             }
         }
