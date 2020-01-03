@@ -125,5 +125,29 @@ fetch('http://localhost:4000/graphql', {
   document.querySelector('.'+element.attr).appendChild(z)
 }))
 document.querySelector('.xr-but').addEventListener('click', () => {
-
+  console.log("sending")
+  const name = document.querySelector('.xr-in').value
+  const attr = document.querySelector('select').value
+  console.log(attr)
+  console.log(name)
+  let data
+  query = `
+    mutation{
+      addService(name: "${name}", attr: "${attr}") {
+        name,
+        attr
+      }
+    }
+  `
+fetch('http://localhost:4000/graphql', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      query:query
+    })
+  })
+  .then((resp) => resp.json())
+  .then(console.log)
 })

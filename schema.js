@@ -120,6 +120,12 @@ const mutation = new GraphQLObjectType({
             args: {
                 name: {type: new GraphQLNonNull(GraphQLString)},
                 attr: {type: new GraphQLNonNull(GraphQLString)}
+            },
+            resolve(parentValue, args){
+                return axios.post('http://localhost:3000/services', {
+                    name: args.name,
+                    attr: args.attr
+                }).then(res => res.data)
             }
         }
     }
